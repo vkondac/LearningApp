@@ -3,6 +3,14 @@ class BooksController < ApplicationController
     render json: Book.all.order("id DESC")
   end
 
+  def search
+    results = SearchService.duvajga(params)
+    if results.empty?
+      render json: results.errors, status: :not_found
+    else
+      render json: results, status: :ok
+    end
+  end
   def create
     book = Book.new(book_params)
     if book.save
